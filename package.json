@@ -1,0 +1,23 @@
+{
+  "name": "citas-api",
+  "version": "1.0.0",
+  "description": "La tesis de juanito :^)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\"",
+    "start": "node src/index.js",
+    "lint": "eslint --fix --ext .js .",
+    "dev": "nodemon src/index.js"
+  },
+  "author": "Yisus",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "express": "^4.17.2",
+    "sequelize": "^7.0.0-alpha.4"
+  },
+  "devDependencies": {
+    "eslint": "^8.6.0",
+    "nodemon": "^2.0.15"
+  }
+}
