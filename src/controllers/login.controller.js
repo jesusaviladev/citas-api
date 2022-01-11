@@ -46,10 +46,11 @@ loginController.login = (request, response, next) => {
 			role: userBD.role
 		}
 
-		const token = jwt.sign(userToSign, 'juanturbina')
+		const token = jwt.sign(userToSign, process.env.SECRET);
 
 		return response.status(202).json({
 			username: userBD.username,
+			userId: userBD.id,
 			token: token
 		})
 	})

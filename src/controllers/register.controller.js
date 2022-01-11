@@ -11,13 +11,12 @@ registerController.signup = (request, response, next) => {
 		password,
 		name,
 		lastName,
-		ci,
-		role
+		ci
 	} = request.body
 
 	//validamos
 
-	if(!username || !password || !role){
+	if(!username || !password || !ci){
 		return response.status(400).json({
 			error: 'Bad Request, missing data'
 		})
@@ -35,21 +34,20 @@ registerController.signup = (request, response, next) => {
 			})
 		}
 
-		else {
-
-			try {
+		try {
 
 				//hasheamos contraseña y guardamos en la base de datos
 
 				const hashedPassword = await bcrypt.hash(password, 10)
 
+				//siempre se registra un usuario con permisos normales en este endpoint 
 				const newUser = {
 					username,
 					password: hashedPassword,
 					name,
 					lastname: lastName,
 					ci,
-					role
+					role: 3
 				}
 
 				connection.query(`INSERT INTO users set ?`, [newUser], (error, results, fields) => {
@@ -76,7 +74,6 @@ registerController.signup = (request, response, next) => {
 				next(error)
 			}
 
-		}
 	})
 
 }

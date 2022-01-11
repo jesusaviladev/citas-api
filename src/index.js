@@ -1,10 +1,13 @@
 //importamos modulos para el servidor
 const express = require('express');
+require('dotenv').config();
 const pkg = require('../package.json');
+
 
 //importamos rutas de express
 const registerRouter = require('./routes/register.routes.js')
 const loginRouter = require('./routes/login.routes.js')
+const citasRouter = require('./routes/citas.routes.js')
 
 
 //importamos conexion a la BD
@@ -19,7 +22,7 @@ app.set('port', process.env.PORT || 3000)
 
 app.use(express.json())
 
-app.use(express.urlencoded({extended: false}))
+app.use(express.urlencoded({ extended: false }))
 
 app.get('/', (request, response) => {
 
@@ -36,6 +39,8 @@ app.get('/', (request, response) => {
 app.use('/signup', registerRouter)
 
 app.use('/login', loginRouter)
+
+app.use('/citas', citasRouter)
 
 //manejadores de errores
 
