@@ -1,9 +1,14 @@
-const connection = require('../connection.js');
+const connection = require('../config/connection.js');
 
 const citasController = {}
 
-citasController.create = (request, response) => {
+
+citasController.getAppointments = (request, response) => {
 	
+} 
+
+citasController.createAppointment = (request, response) => {
+
 	//extraemos datos de la cita desde la solicitud
 	const { date, userId, status } = request.body
 
@@ -35,18 +40,18 @@ citasController.create = (request, response) => {
 
 		response.status(201).json({
 			message: 'Succesfully created appointment'
-		}).end()
+		})
 	})
 
 }
 
 
-citasController.edit = (request, response, next) => {
+citasController.editAppointment = (request, response, next) => {
 	response.send('EDITAR CITA')
 }
 
 
-citasController.cancel = (request, response, next) => {
+citasController.cancelAppointment = (request, response, next) => {
 	response.send('CANCELAR CITA')
 }
 

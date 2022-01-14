@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const auth = {}
 
-auth.authenticateUser = (request, response, next) => {
+auth.verifyToken = (request, response, next) => {
 
 	const authorization = request.get('authorization');
 
@@ -45,6 +45,10 @@ auth.authenticateUser = (request, response, next) => {
 
 	}
 
+}
+
+auth.verifyUser = () => {
+	
 }
 
 module.exports = auth;

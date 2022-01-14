@@ -19,6 +19,11 @@ const connection = mysql.createConnection({
 		console.log('Succesfully connected to Database')
 	})
 
+process.on('uncaughtException', (error) => {
+	    console.log(error)
+	    connection.end()
+	})
+
 
 //exportamos el objeto de la conexión para usarlo en otras partes del programa
 module.exports = connection;
