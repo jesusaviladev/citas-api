@@ -1,7 +1,9 @@
 const jwt = require('jsonwebtoken');
-const auth = {}
+const connection = require('../config/connection.js');
 
-auth.verifyToken = (request, response, next) => {
+const auth = {}
+//función para autenticar un usuario y permitir acceso a rutas
+auth.checkAuth = (request, response, next) => {
 
 	const authorization = request.get('authorization');
 
@@ -46,9 +48,37 @@ auth.verifyToken = (request, response, next) => {
 	}
 
 }
-
-auth.verifyUser = () => {
+//función para determinar rol de un usuario y otorgar permisos
+auth.checkUserRoles = (acceptedRoles = ['user', 'admin', 'worker']) => async (request, response, next) => {
 	
+	const { userId } = request.body
+
+	if(!userId) return response.status(400).json({
+		error: 'Missing or invalid id'
+	})
+
+	connection.query(`SELECT roles.description 
+		FROM users INNER JOIN roles 
+		ON users.role = roles.id WHERE users.id = ${userId}`, (error, results) => {
+			
+			if(error){
+				next(error)
+				return;
+			}
+
+			const userRole = results[0].description
+
+			if(acceptedRoles.includes(userRole)){
+				next()
+			}
+
+			else {
+
+				return response.status(401).json({
+					error: 'Not allowed'
+				})
+			}
+		})
 }
 
 module.exports = auth;

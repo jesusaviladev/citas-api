@@ -2,14 +2,14 @@ const citasRouter = require('express').Router();
 const citasController = require('../controllers/citas.controller.js');
 const auth = require('../middlewares/auth.js');
 
-const { verifyToken } = auth;
+const { checkAuth, checkUserRoles } = auth;
 
-citasRouter.get('/', verifyToken, citasController.getAppointments)
+citasRouter.get('/', checkAuth, citasController.getAppointments)
 
-citasRouter.post('/', verifyToken, citasController.createAppointment);
+citasRouter.post('/', checkAuth, citasController.createAppointment);
 
-citasRouter.put('/', verifyToken, citasController.editAppointment);
+citasRouter.put('/', checkAuth, citasController.editAppointment);
 
-citasRouter.delete('/cancel/:id', verifyToken, citasController.cancelAppointment);
+citasRouter.delete('/cancel/:id', checkAuth, citasController.cancelAppointment);
 
 module.exports = citasRouter;
