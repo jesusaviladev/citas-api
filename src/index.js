@@ -42,7 +42,7 @@ app.use('/api/citas', citasRouter)
 app.use((request, response, next) => {
 
 	response.status(404).json({
-		error: 'Bad Request'
+		error: 'Not found'
 	})
 })
 
