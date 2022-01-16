@@ -12,8 +12,10 @@ citasRouter.get('/user/:userId', checkAuth, citasController.getAppointmentByUser
 
 citasRouter.post('/', checkAuth, citasController.createAppointment);
 
-citasRouter.put('/', checkAuth, citasController.editAppointment);
+citasRouter.put('/:appointmentId', checkAuth, citasController.editAppointment);
 
-citasRouter.put('/cancel/:id', checkAuth, citasController.cancelAppointment);
+citasRouter.put('/cancel/:appointmentId', checkAuth, citasController.cancelAppointment);
+
+citasRouter.delete('/:id', checkAuth, checkUserRoles(['admin']), citasController.deleteAppointment);
 
 module.exports = citasRouter;

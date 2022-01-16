@@ -13,12 +13,14 @@ authController.signup = (request, response, next) => {
 		password,
 		name,
 		lastName,
-		ci
+		ci,
+		email,
+		birthday
 	} = request.body
 
 	//validamos
 
-	if(!username || !password || !ci || !name || !lastName){
+	if(!username || !password || !ci || !name || !lastName || !email || !birthday){
 		return response.status(400).json({
 			error: 'Bad Request, missing data'
 		})
@@ -49,6 +51,9 @@ authController.signup = (request, response, next) => {
 					name,
 					lastname: lastName,
 					ci,
+					email,
+					birthday,
+					created_at: new Date().toISOString(),
 					role: 3
 				}
 

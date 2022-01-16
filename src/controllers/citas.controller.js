@@ -37,7 +37,7 @@ citasController.getAppointmentById = (request, response, next) => {
 	if(!id) return response.status(400).json({ error: 'Bad request'})
 
 	connection.query(`SELECT a.*, u.name, u.lastname, u.ci FROM appointments as a
-		LEFT JOIN users as u ON a.user_id = u.id  
+		INNER JOIN users as u ON a.user_id = u.id  
 		WHERE a.id = ?`, [id], (error, results, fields) => {
 
 			if(results.length === 0){
@@ -81,15 +81,15 @@ citasController.getAppointmentByUserId = (request, response, next) => {
 			})
 	})
 } 
-
+//crear nueva cita
 citasController.createAppointment = (request, response) => {
 
 	//extraemos datos de la cita desde la solicitud
-	const { date, userId, status } = request.body
+	const { date, userId } = request.body
 
 	//validamos
 
-	if(!date || !userId || !status){
+	if(!date || !userId){
 		return response.status(400).json({
 			error: 'Bad request, missing data'
 		})
@@ -98,7 +98,8 @@ citasController.createAppointment = (request, response) => {
 	const newAppointment = {
 		date,
 		user_id: userId,
-		status
+		status: 'pending',
+		is_active: true
 	}
 
 	//insertamos en la base de datos
@@ -120,14 +121,88 @@ citasController.createAppointment = (request, response) => {
 
 }
 
-
+//Reasginar cita
 citasController.editAppointment = (request, response, next) => {
-	response.send('EDITAR CITA')
+	const { appointmentId } = request.params
+	const { date } = request.body
+
+	if(!appointmentId || !date){
+		return response.status(400).json({
+			error: 'Bad request, missing data'
+		})
+	}
+
+	connection.query(`UPDATE appointments SET date = ? WHERE id = ?`, [date, appointmentId], (error, results, fields) => {
+		if(error){
+			next(error)
+		}
+
+		if(results.affectedRows === 0){
+			return response.status(404).json({
+				error: 'No results found'
+			})
+		}
+
+		return response.status(202).json({
+			message: 'Succesfully updated'
+		})
+	})
+
+
 }
 
-
 citasController.cancelAppointment = (request, response, next) => {
-	response.send('CANCELAR CITA')
+	
+	const { appointmentId } = request.params
+
+	if(!appointmentId) return response.status(400).json({
+		error: 'Bad request, missing data'
+	})
+
+	connection.query(`UPDATE appointments 
+		SET is_active = false, status = 'cancelled' WHERE id = ?`,[appointmentId], (error, results) => {
+			if(error){
+				next(error)
+			}
+
+			if(results.affectedRows === 0){
+				return response.status(404).json({
+					error: 'No results found'
+				})
+			}
+
+			return response.status(202).json({
+				message: 'Cancelled appointment'
+			})
+		})
+
+}
+
+citasController.deleteAppointment = (request, response, next) => {
+
+	const { id } = request.params
+
+	if(!id) return response.status(400).json({
+		error: 'Missing data'
+	})
+
+	connection.query(`DELETE FROM appointments WHERE id = ?`, [id], (error, results	) => {
+		
+		if(error){
+			next(error)
+		}
+
+		if(results.affectedRows === 0){
+				return response.status(404).json({
+					error: 'No results found'
+				})
+			}
+
+		return response.status(202).json({
+				message: 'Deleted appointment data'
+			})
+
+	})
 }
 
 
