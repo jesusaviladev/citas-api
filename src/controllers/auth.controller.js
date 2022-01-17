@@ -53,7 +53,7 @@ authController.signup = (request, response, next) => {
 					ci,
 					email,
 					birthday,
-					created_at: new Date().toISOString(),
+					created_at: new Date(),
 					role: 3
 				}
 
