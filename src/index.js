@@ -6,6 +6,7 @@ const pkg = require('../package.json');
 //importamos rutas de express
 const authRouter = require('./routes/auth.routes.js')
 const citasRouter = require('./routes/citas.routes.js')
+const usersRouter = require('./routes/users.routes.js')
 
 //importamos conexion a la BD
 const connection = require('./config/connection.js');
@@ -36,6 +37,8 @@ app.get('/', (request, response) => {
 app.use('/api/auth', authRouter)
 
 app.use('/api/citas', citasRouter)
+
+app.use('/api/users', usersRouter)
 
 //manejadores de errores
 

@@ -1,11 +1,11 @@
 const connection = require('../config/connection.js');
 const userController = {}
 
-userController.createUser = (request, response) => {
+userController.getUsers = (request, response) => {
 
 }
 
-userController.getUsers = (request, response) => {
+userController.createUser = (request, response) => {
 
 }
 
