@@ -1,21 +1,42 @@
-const citasRouter = require('express').Router();
-const citasController = require('../controllers/citas.controller.js');
-const auth = require('../middlewares/auth.js');
+const citasRouter = require("express").Router();
+const citasController = require("../controllers/citas.controller.js");
+const auth = require("../middlewares/auth.js");
+const { validateAppointment } = require("../middlewares/validation.js");
 
 const { checkAuth, checkUserRoles } = auth;
 
-citasRouter.get('/', checkAuth, citasController.getAppointments);
+const {
+	getAppointments,
+	getAppointmentById,
+	getAppointmentByUserId,
+	createAppointment,
+	editAppointment,
+	cancelAppointment,
+	deleteAppointment,
+} = citasController;
 
-citasRouter.get('/:id', checkAuth, citasController.getAppointmentById);
+citasRouter.get("/", checkAuth, getAppointments);
 
-citasRouter.get('/user/:userId', checkAuth, citasController.getAppointmentByUserId);
+citasRouter.get("/:id", checkAuth, getAppointmentById);
 
-citasRouter.post('/', checkAuth, citasController.createAppointment);
+citasRouter.get("/user/:userId", checkAuth, getAppointmentByUserId);
 
-citasRouter.put('/:appointmentId', checkAuth, citasController.editAppointment);
+citasRouter.post("/", checkAuth, validateAppointment, createAppointment);
 
-citasRouter.put('/cancel/:appointmentId', checkAuth, citasController.cancelAppointment);
+citasRouter.put(
+	"/:appointmentId",
+	checkAuth,
+	validateAppointment,
+	editAppointment
+);
 
-citasRouter.delete('/:id', checkAuth, checkUserRoles(['admin']), citasController.deleteAppointment);
+citasRouter.put("/cancel/:appointmentId", checkAuth, cancelAppointment);
+
+citasRouter.delete(
+	"/:id",
+	checkAuth,
+	checkUserRoles(["admin"]),
+	deleteAppointment
+);
 
 module.exports = citasRouter;

@@ -1,15 +1,27 @@
-const userRouter = require('express').Router()
-const userController = require('../controllers/users.controller.js')
-const auth = require('../middlewares/auth.js');
+const userRouter = require("express").Router();
+const userController = require("../controllers/users.controller.js");
+const auth = require("../middlewares/auth.js");
+const {
+	validateSpecialUser,
+	validateEditedUser,
+} = require("../middlewares/validation.js");
 
 const { checkAuth, checkUserRoles } = auth;
 
-userRouter.get('/', checkAuth, checkUserRoles(['admin']), userController.getUsers)
+const { getUsers, createUser, editUser, deleteUser } = userController;
 
-userRouter.post('/', checkAuth, checkUserRoles(['admin']), userController.createUser)
+userRouter.get("/", checkAuth, checkUserRoles(["admin"]), getUsers);
 
-userRouter.put('/:userId', checkAuth, userController.editUser)
+userRouter.post(
+	"/",
+	checkAuth,
+	checkUserRoles(["admin"]),
+	validateSpecialUser,
+	createUser
+);
 
-userRouter.delete('/:userId', checkAuth, checkUserRoles(['admin']), userController.deleteUser)
+userRouter.put("/:id", checkAuth, validateEditedUser, editUser);
+
+userRouter.delete("/:userId", checkAuth, checkUserRoles(["admin"]), deleteUser);
 
 module.exports = userRouter;
